@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.compose)
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
 
 
     implementation(platform(libs.androidx.compose.bom))
