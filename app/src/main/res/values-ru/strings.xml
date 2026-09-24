@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Хроники</string>
+    <string name="my_news">Мои новости</string>
+    <string name="what_interests_you">Что вас интересует?</string>
+    <string name="add_subscription">Добавить Подписку</string>
+    <string name="subscriptions">Темы (%1$d)</string>
+    <string name="articles">Новости (%1$d)</string>
+    <string name="no_subscriptions">Нет подписок</string>
+    <string name="no_articles_for_selected_topics">Статьи для выбранных подписок не найдены</string>
 </resources>

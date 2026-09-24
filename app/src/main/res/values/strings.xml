@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">The chronicle</string>
+    <string name="my_news">My news</string>
+    <string name="what_interests_you">What interests you?</string>
+    <string name="add_subscription">Add Subscription</string>
+    <string name="subscriptions">Subscriptions (%1$d)</string>
+    <string name="articles">Articles (%1$d)</string>
+    <string name="no_subscriptions">No subscriptions</string>
+    <string name="no_articles_for_selected_topics">No articles for selected topics</string>
 </resources>

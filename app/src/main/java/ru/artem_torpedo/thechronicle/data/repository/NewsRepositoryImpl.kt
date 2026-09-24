@@ -38,7 +38,7 @@ class NewsRepositoryImpl @Inject constructor(
 
     private suspend fun loadArticles(topic: String): List<ArticleDbModel> {
         return try {
-            val articles = apiService.getArticles(topic)
+            val articles =  apiService.getArticles(topic = topic)
             articles.toDbModels(topic)
         } catch (e: Exception) {
             if (e is CancellationException) {

@@ -8,5 +8,6 @@ interface NewsApiResponse {
     @GET("v2/everything?apiKey=419ba04ba1e74c46b2bff2803814bfbd")
     suspend fun getArticles(
         @Query("q") topic: String,
+        @Query("pageSize") pageSize: Int = 50,
     ): NewsDto
 }
