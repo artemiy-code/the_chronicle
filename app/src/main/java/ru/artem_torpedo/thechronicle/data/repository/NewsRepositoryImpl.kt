@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import ru.artem_torpedo.thechronicle.data.background.RefreshDataWorker
 import ru.artem_torpedo.thechronicle.data.local.dao.NewsDao
 import ru.artem_torpedo.thechronicle.data.local.entity.ArticleDbModel
@@ -29,6 +28,11 @@ class NewsRepositoryImpl @Inject constructor(
     val apiService: NewsApiResponse,
     val workManager: WorkManager,
 ) : NewsRepository {
+
+    init {
+        startBackgroundRefresh()
+    }
+
     override suspend fun addNewSubscription(topic: String) {
         val subscription = SubscriptionDbModel(topic)
         newsDao.addNewSubscription(subscription)

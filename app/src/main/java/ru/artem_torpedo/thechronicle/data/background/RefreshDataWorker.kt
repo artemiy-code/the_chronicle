@@ -2,13 +2,17 @@ package ru.artem_torpedo.thechronicle.data.background
 
 import android.content.Context
 import android.util.Log
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import ru.artem_torpedo.thechronicle.domain.useCases.UpdateAllArticlesUseCase
 
-class RefreshDataWorker(
-    context: Context,
-    params: WorkerParameters,
+@HiltWorker
+class RefreshDataWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted params: WorkerParameters,
     private val updateAllArticlesUseCase: UpdateAllArticlesUseCase,
 ) : CoroutineWorker(context, params) {
 
