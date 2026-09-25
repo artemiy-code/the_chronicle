@@ -378,7 +378,7 @@ fun SubscriptionsScreen(
                                         "${article.title}.\n\n${article.articleUrl}"
                                     )
                                 }
-                                val chooser = Intent.createChooser(intent,null)
+                                val chooser = Intent.createChooser(intent,"Share link")
                                 activityContext.startActivity(chooser)
                             },
                         ) {

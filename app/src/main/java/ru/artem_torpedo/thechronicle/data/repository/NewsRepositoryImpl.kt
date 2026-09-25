@@ -1,6 +1,9 @@
 package ru.artem_torpedo.thechronicle.data.repository
 
 import android.util.Log
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -8,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import ru.artem_torpedo.thechronicle.data.background.RefreshDataWorker
 import ru.artem_torpedo.thechronicle.data.local.dao.NewsDao
 import ru.artem_torpedo.thechronicle.data.local.entity.ArticleDbModel
 import ru.artem_torpedo.thechronicle.data.local.entity.SubscriptionDbModel
@@ -17,11 +21,13 @@ import ru.artem_torpedo.thechronicle.data.mapper.toDbModels
 import ru.artem_torpedo.thechronicle.data.remote.NewsApiResponse
 import ru.artem_torpedo.thechronicle.domain.entity.Article
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
     val newsDao: NewsDao,
     val apiService: NewsApiResponse,
+    val workManager: WorkManager,
 ) : NewsRepository {
     override suspend fun addNewSubscription(topic: String) {
         val subscription = SubscriptionDbModel(topic)
@@ -38,7 +44,7 @@ class NewsRepositoryImpl @Inject constructor(
 
     private suspend fun loadArticles(topic: String): List<ArticleDbModel> {
         return try {
-            val articles =  apiService.getArticles(topic = topic)
+            val articles = apiService.getArticles(topic = topic)
             articles.toDbModels(topic)
         } catch (e: Exception) {
             if (e is CancellationException) {
@@ -97,5 +103,18 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteArticlesForTopics(topics: List<String>) {
         newsDao.deleteArticlesForTopics(topics)
+    }
+
+    private fun startBackgroundRefresh() {
+        val request = PeriodicWorkRequestBuilder<RefreshDataWorker>(
+            repeatInterval = 30L,
+            repeatIntervalTimeUnit = TimeUnit.MINUTES
+        ).build()
+
+        workManager.enqueueUniquePeriodicWork(
+            uniqueWorkName = "refresh articles",
+            existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+            request = request
+        )
     }
 }

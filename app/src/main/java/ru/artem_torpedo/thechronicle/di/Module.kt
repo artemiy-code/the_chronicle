@@ -2,6 +2,7 @@ package ru.artem_torpedo.thechronicle.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -67,6 +68,13 @@ interface Module {
             db: AppDatabase,
         ): NewsDao {
             return db.dao()
+        }
+
+        @Provides
+        fun getWorkManager(
+            @ApplicationContext context: Context,
+        ): WorkManager {
+            return WorkManager.getInstance(context)
         }
     }
 }
