@@ -42,7 +42,7 @@ interface Module {
         fun provideApiService(): NewsApiResponse {
             val baseUrl = "https://newsapi.org/"
             val converter = json.asConverterFactory(
-                "applicatiom/json".toMediaType()
+                "application/json".toMediaType()
             )
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)

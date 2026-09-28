@@ -7,7 +7,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import ru.artem_torpedo.thechronicle.domain.useCases.UpdateAllArticlesUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.UpdateAllArticlesUseCase
 
 @HiltWorker
 class RefreshDataWorker @AssistedInject constructor(

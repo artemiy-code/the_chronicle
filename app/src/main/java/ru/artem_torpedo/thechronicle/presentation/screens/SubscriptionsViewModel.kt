@@ -18,12 +18,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.artem_torpedo.thechronicle.domain.entity.Article
-import ru.artem_torpedo.thechronicle.domain.useCases.AddNewSubscriptionUseCase
-import ru.artem_torpedo.thechronicle.domain.useCases.DeleteArticlesForTopicsUseCase
-import ru.artem_torpedo.thechronicle.domain.useCases.DeleteSubscriptionUseCase
-import ru.artem_torpedo.thechronicle.domain.useCases.GetAllSubscriptionsUseCase
-import ru.artem_torpedo.thechronicle.domain.useCases.GetArticlesForTopicsUseCase
-import ru.artem_torpedo.thechronicle.domain.useCases.UpdateAllArticlesUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.AddNewSubscriptionUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.DeleteArticlesForTopicsUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.DeleteSubscriptionUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.GetAllSubscriptionsUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.GetArticlesForTopicsUseCase
+import ru.artem_torpedo.thechronicle.domain.useCases.mainScreen.UpdateAllArticlesUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel

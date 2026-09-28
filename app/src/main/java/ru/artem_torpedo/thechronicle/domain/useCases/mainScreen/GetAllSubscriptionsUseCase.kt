@@ -1,4 +1,4 @@
-package ru.artem_torpedo.thechronicle.domain.useCases
+package ru.artem_torpedo.thechronicle.domain.useCases.mainScreen
 
 import kotlinx.coroutines.flow.Flow
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository

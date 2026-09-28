@@ -1,4 +1,4 @@
-package ru.artem_torpedo.thechronicle.domain.useCases
+package ru.artem_torpedo.thechronicle.domain.useCases.mainScreen
 
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository
 import javax.inject.Inject
