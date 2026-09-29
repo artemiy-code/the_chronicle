@@ -4,6 +4,7 @@ import ru.artem_torpedo.thechronicle.data.local.entity.ArticleDbModel
 import ru.artem_torpedo.thechronicle.data.local.entity.SubscriptionDbModel
 import ru.artem_torpedo.thechronicle.data.remote.NewsDto
 import ru.artem_torpedo.thechronicle.domain.entity.Article
+import ru.artem_torpedo.thechronicle.domain.entity.Interval
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -43,4 +44,10 @@ fun List<ArticleDbModel>.convertToEntities(): List<Article> {
             articleUrl = it.articleUrl
         )
     }.distinct()
+}
+
+fun Int.getIntervalFromMinutes(): Interval {
+    return Interval.entries.find {
+        it.minutes == this
+    } ?: Interval.DAY
 }

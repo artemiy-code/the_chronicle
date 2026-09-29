@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.hilt.work)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.datastore.preferences)
 
 
     implementation(platform(libs.androidx.compose.bom))
