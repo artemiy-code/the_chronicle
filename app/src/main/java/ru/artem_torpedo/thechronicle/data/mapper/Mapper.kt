@@ -5,6 +5,8 @@ import ru.artem_torpedo.thechronicle.data.local.entity.SubscriptionDbModel
 import ru.artem_torpedo.thechronicle.data.remote.NewsDto
 import ru.artem_torpedo.thechronicle.domain.entity.Article
 import ru.artem_torpedo.thechronicle.domain.entity.Interval
+import ru.artem_torpedo.thechronicle.domain.entity.RefreshParameters
+import ru.artem_torpedo.thechronicle.domain.entity.Settings
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -50,4 +52,8 @@ fun Int.getIntervalFromMinutes(): Interval {
     return Interval.entries.find {
         it.minutes == this
     } ?: Interval.DAY
+}
+
+fun Settings.toRefreshParametrs(): RefreshParameters {
+    return RefreshParameters(language, updateInterval, wifiOnly)
 }

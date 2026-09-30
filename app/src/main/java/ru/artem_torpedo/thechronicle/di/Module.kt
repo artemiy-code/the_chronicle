@@ -18,7 +18,9 @@ import ru.artem_torpedo.thechronicle.data.local.AppDatabase
 import ru.artem_torpedo.thechronicle.data.local.dao.NewsDao
 import ru.artem_torpedo.thechronicle.data.remote.NewsApiResponse
 import ru.artem_torpedo.thechronicle.data.repository.NewsRepositoryImpl
+import ru.artem_torpedo.thechronicle.data.repository.SettingsRepositoryImpl
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository
+import ru.artem_torpedo.thechronicle.domain.iRepository.SettingsRepository
 import javax.inject.Singleton
 
 @Module
@@ -27,7 +29,13 @@ interface Module {
 
     @Singleton
     @Binds
-    fun getRepo(
+    fun getSettingsRepo(
+        impl: SettingsRepositoryImpl,
+    ): SettingsRepository
+
+    @Singleton
+    @Binds
+    fun getNewsRepo(
         impl: NewsRepositoryImpl,
     ): NewsRepository
 

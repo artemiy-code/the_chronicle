@@ -1,12 +1,23 @@
+@file:OptIn(FlowPreview::class)
+
 package ru.artem_torpedo.thechronicle.data.repository
 
 import android.util.Log
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -17,20 +28,35 @@ import ru.artem_torpedo.thechronicle.data.local.entity.SubscriptionDbModel
 import ru.artem_torpedo.thechronicle.data.mapper.convertToEntities
 import ru.artem_torpedo.thechronicle.data.mapper.convertToStringList
 import ru.artem_torpedo.thechronicle.data.mapper.toDbModels
+import ru.artem_torpedo.thechronicle.data.mapper.toRefreshParametrs
 import ru.artem_torpedo.thechronicle.data.remote.NewsApiResponse
 import ru.artem_torpedo.thechronicle.domain.entity.Article
+import ru.artem_torpedo.thechronicle.domain.entity.RefreshParameters
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository
+import ru.artem_torpedo.thechronicle.domain.iRepository.SettingsRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 class NewsRepositoryImpl @Inject constructor(
     val newsDao: NewsDao,
     val apiService: NewsApiResponse,
     val workManager: WorkManager,
+    val settingsRepository: SettingsRepository,
 ) : NewsRepository {
 
+    val scope = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineName("Test"))
+
     init {
-        startBackgroundRefresh()
+        scope.launch {
+            settingsRepository.getSettings().map {
+                it.toRefreshParametrs()
+            }.debounce(100.milliseconds)
+                .distinctUntilChanged()
+                .collect {
+                    startBackgroundRefresh(it)
+                }
+        }
     }
 
     override suspend fun addNewSubscription(topic: String) {
@@ -109,11 +135,21 @@ class NewsRepositoryImpl @Inject constructor(
         newsDao.deleteArticlesForTopics(topics)
     }
 
-    private fun startBackgroundRefresh() {
+    private fun startBackgroundRefresh(refreshParameters: RefreshParameters) {
+        val constraints = Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .setRequiredNetworkType(
+                if (refreshParameters.wifiOnly) NetworkType.METERED
+                else NetworkType.CONNECTED
+            )
+            .build()
+
         val request = PeriodicWorkRequestBuilder<RefreshDataWorker>(
-            repeatInterval = 30L,
+            repeatInterval = refreshParameters.updateInterval.minutes.toLong(),
             repeatIntervalTimeUnit = TimeUnit.MINUTES
-        ).build()
+        )
+            .setConstraints(constraints)
+            .build()
 
         workManager.enqueueUniquePeriodicWork(
             uniqueWorkName = "refresh articles",
