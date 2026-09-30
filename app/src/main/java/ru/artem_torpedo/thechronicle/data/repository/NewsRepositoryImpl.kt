@@ -19,7 +19,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.artem_torpedo.thechronicle.data.background.RefreshDataWorker
 import ru.artem_torpedo.thechronicle.data.local.dao.NewsDao
@@ -42,22 +44,7 @@ class NewsRepositoryImpl @Inject constructor(
     val newsDao: NewsDao,
     val apiService: NewsApiResponse,
     val workManager: WorkManager,
-    val settingsRepository: SettingsRepository,
 ) : NewsRepository {
-
-    val scope = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineName("Test"))
-
-    init {
-        scope.launch {
-            settingsRepository.getSettings().map {
-                it.toRefreshParametrs()
-            }.debounce(100.milliseconds)
-                .distinctUntilChanged()
-                .collect {
-                    startBackgroundRefresh(it)
-                }
-        }
-    }
 
     override suspend fun addNewSubscription(topic: String) {
         val subscription = SubscriptionDbModel(topic)
@@ -135,11 +122,11 @@ class NewsRepositoryImpl @Inject constructor(
         newsDao.deleteArticlesForTopics(topics)
     }
 
-    private fun startBackgroundRefresh(refreshParameters: RefreshParameters) {
+    override suspend fun startBackgroundRefresh(refreshParameters: RefreshParameters) {
         val constraints = Constraints.Builder()
             .setRequiresBatteryNotLow(true)
             .setRequiredNetworkType(
-                if (refreshParameters.wifiOnly) NetworkType.METERED
+                if (refreshParameters.wifiOnly) NetworkType.UNMETERED
                 else NetworkType.CONNECTED
             )
             .build()
