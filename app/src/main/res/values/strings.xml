@@ -7,4 +7,7 @@
     <string name="articles">Articles (%1$d)</string>
     <string name="no_subscriptions">No subscriptions</string>
     <string name="no_articles_for_selected_topics">No articles for selected topics</string>
+    <string name="notification">Notification</string>
+    <string name="new_articles">New articles</string>
+    <string name="updated_topics">Updated %1$d topics: %2$s</string>
 </resources>

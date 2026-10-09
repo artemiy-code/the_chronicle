@@ -8,4 +8,7 @@
     <string name="articles">Новости (%1$d)</string>
     <string name="no_subscriptions">Нет подписок</string>
     <string name="no_articles_for_selected_topics">Статьи для выбранных подписок не найдены</string>
+    <string name="notification">Уведомление</string>
+    <string name="new_articles">Свежие новости</string>
+    <string name="updated_topics">Обновлено %1$d тем: %2$s</string>
 </resources>

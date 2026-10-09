@@ -58,6 +58,7 @@ import ru.artem_torpedo.thechronicle.presentation.utils.convertToDate
 @Composable
 fun SubscriptionsScreen(
     viewModel: SubscriptionsViewModel = hiltViewModel(),
+    onSettingsClick : () -> Unit,
 ) {
     val activityContext = LocalContext.current
 
@@ -108,7 +109,7 @@ fun SubscriptionsScreen(
                             .padding(horizontal = 8.dp)
                             .clip(CircleShape)
                             .clickable {
-                                // TODO: Settings
+                                onSettingsClick()
                             },
                         painter = painterResource(R.drawable.ic_settings),
                         contentDescription = "Settings"

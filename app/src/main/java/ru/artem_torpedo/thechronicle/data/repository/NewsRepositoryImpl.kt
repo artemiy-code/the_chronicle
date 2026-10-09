@@ -9,19 +9,11 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.artem_torpedo.thechronicle.data.background.RefreshDataWorker
 import ru.artem_torpedo.thechronicle.data.local.dao.NewsDao
@@ -30,15 +22,12 @@ import ru.artem_torpedo.thechronicle.data.local.entity.SubscriptionDbModel
 import ru.artem_torpedo.thechronicle.data.mapper.convertToEntities
 import ru.artem_torpedo.thechronicle.data.mapper.convertToStringList
 import ru.artem_torpedo.thechronicle.data.mapper.toDbModels
-import ru.artem_torpedo.thechronicle.data.mapper.toRefreshParametrs
 import ru.artem_torpedo.thechronicle.data.remote.NewsApiResponse
 import ru.artem_torpedo.thechronicle.domain.entity.Article
 import ru.artem_torpedo.thechronicle.domain.entity.RefreshParameters
 import ru.artem_torpedo.thechronicle.domain.iRepository.NewsRepository
-import ru.artem_torpedo.thechronicle.domain.iRepository.SettingsRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 class NewsRepositoryImpl @Inject constructor(
     val newsDao: NewsDao,

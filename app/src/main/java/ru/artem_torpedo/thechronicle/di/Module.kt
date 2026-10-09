@@ -1,6 +1,8 @@
 package ru.artem_torpedo.thechronicle.di
 
+import android.app.NotificationManager
 import android.content.Context
+import androidx.core.content.getSystemService
 import androidx.room.Room
 import androidx.work.WorkManager
 import dagger.Binds
@@ -83,6 +85,14 @@ interface Module {
             @ApplicationContext context: Context,
         ): WorkManager {
             return WorkManager.getInstance(context)
+        }
+
+        @Provides
+        @Singleton
+        fun getNotificationManager(
+            @ApplicationContext context: Context,
+        ): NotificationManager? {
+            return context.getSystemService<NotificationManager>()
         }
     }
 }

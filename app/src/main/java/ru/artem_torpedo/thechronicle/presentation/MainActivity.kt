@@ -2,8 +2,10 @@ package ru.artem_torpedo.thechronicle.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import dagger.hilt.android.AndroidEntryPoint
 import ru.artem_torpedo.thechronicle.presentation.screens.SubscriptionsScreen
 import ru.artem_torpedo.thechronicle.presentation.ui.theme.TheChronicleTheme
@@ -15,7 +17,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TheChronicleTheme {
-                SubscriptionsScreen()
+                val launcher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.RequestPermission()
+                ) {}
+                SubscriptionsScreen(
+                    onSettingsClick = {
+                        launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                )
             }
         }
     }
